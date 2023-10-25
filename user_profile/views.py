@@ -1,3 +1,10 @@
 from django.shortcuts import render
+from user_profile.models import UserProfile
+from django.http import HttpResponseRedirect
 
-# Create your views here.
+def show_profile(request):
+    name =UserProfile.objects.filter(user = request.user)
+    context = {
+        'username' : request.user.username
+        }
+    return render(request, 'profile.html', context)
