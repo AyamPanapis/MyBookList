@@ -1,5 +1,12 @@
 from django.shortcuts import render
 
-# Create your views here.
 def show_main(request):
-    return render(request, 'main.html')
+    if request.user.is_authenticated:
+        username = request.user.username
+    else:
+        username = "Not logged in"
+    
+    context = {
+        'username': username
+    }
+    return render(request, 'main.html', context)
