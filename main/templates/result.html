@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p> hi </p>
+
+{% for book in books%}
+    <p> {{ book.title }} </p>
+    <p> {{ book.authors }} </p>
+    <img src="{{ book.image }}" alt="book image">
+{% endfor %}
+
+<p>{{message}}</p>
+
+{% endblock content %}
