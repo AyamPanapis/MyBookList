@@ -1,5 +1,5 @@
 from django.urls import path
-from book.views import show_books
+from .views import show_books, add_review, user_review_list  # Make sure to import all necessary views here
 
 app_name = 'book'
 

@@ -24,6 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
     path('profile/', include('user_profile.urls')),
-    # path('category/', include('categories.urls')),
-
+    path('category/', include('categories.urls')),
+    path('book/', include('book.urls')),
 ]
