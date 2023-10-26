@@ -39,7 +39,8 @@ def result(request):
             'authors': ", ".join(book['volumeInfo']['authors']) if 'authors' in book['volumeInfo'] else "",
             'publisher': book['volumeInfo']['publisher'] if 'publisher' in book['volumeInfo'] else "",
             'info': book['volumeInfo']['infoLink'],
-            'popularity': book['volumeInfo']['ratingsCount'] if 'ratingsCount' in book['volumeInfo'] else 0
+            'popularity': book['volumeInfo']['ratingsCount'] if 'ratingsCount' in book['volumeInfo'] else 0,
+            'id': book['id'],
         }
         books.append(book_dict)
     return render(request, 'result.html', {'books': books})
