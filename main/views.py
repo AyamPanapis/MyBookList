@@ -41,6 +41,7 @@ def result(request):
                 'popularity': book['volumeInfo']['ratingsCount'] if 'ratingsCount' in book['volumeInfo'] else 0,
                 'description': book['volumeInfo']['description'] if 'description' in book['volumeInfo'] else "No description available.",
                 'categories': ", ".join(book['volumeInfo']['categories']) if 'categories' in book['volumeInfo'] else 'No categories available.',
+                'id': book['id'],
             }
             books.append(book_dict)
     return render(request, 'result.html', {'books': books})
