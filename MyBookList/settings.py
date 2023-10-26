@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'book',
     'tailwind',
     'theme',
+    'dataset',
 ]
 
 MIDDLEWARE = [

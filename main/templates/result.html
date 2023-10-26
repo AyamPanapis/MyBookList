@@ -3,15 +3,18 @@
 {% block content %}
 
 <p> hi </p>
-
-{% for book in books%} 
-    <a href="{% url 'book:show_books' id=book.id %}"><p> {{ book.title }} </p></a>
-    <p> {{ book.authors }} </p>
-    <p> {{ book.description }} </p>
-    <p> {{ book.categories }}</p>
-    <p> {{ book.popularity }}</p>
-    <img src="{{ book.image }}" alt="book image">
-{% endfor %}
+{% if books %}
+    {% for book in books%} 
+        <a href="{% url 'book:show_books' title=book.title %}"><p> {{ book.title }} </p></a>
+        <p> {{ book.author }} </p>
+        <p> {{ book.description }} </p>
+        <p> {{ book.categories }}</p>
+        <p> {{ book.popularity }}</p>
+        <img src="{{ book.image_link }}" alt="book image">
+    {% endfor %}
+{% else %}
+    <p> No books found </p>
+{% endif %}
 
 <p>{{message}}</p>
 
