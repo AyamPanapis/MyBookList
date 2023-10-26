@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "cross-env": "^7.0.3"
+  },
+  "dependencies": {
+    "flowbite": "^1.8.1"
   }
 }
