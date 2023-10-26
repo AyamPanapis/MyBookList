@@ -25,6 +25,7 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),
     path('profile/', include('user_profile.urls')),
     path('category/', include('categories.urls')),
-    path('book/', include('book.urls'))
+    path('book/', include('book.urls')),
+    path('xml/', include('dataset.urls')),
 
 ]

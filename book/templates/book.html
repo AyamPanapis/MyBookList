@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 {% block content%}
 
-<p>{{book.title}}</p>
-<img src="{{ book.image }}" alt="book image">
-<p>{{book.authors}}</p>
-<p>{{book.publisher}}</p>
-<br>
-<p>{{book.description|safe}}</p>
-<br>
-<p>{{book.categories}}</p>
+<p>{{title}}</p>
+
+{% for book in books %}
+    <img src="{{ book.image_link }}" alt="book image">
+    <p>{{book.author}}</p>
+    <p>{{book.publisher}}</p>
+    <br>
+    <p>{{book.description}}</p>
+    <br>
+    <p>{{book.categories}}</p>
+{% endfor %}
 
 {% endblock content %}

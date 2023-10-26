@@ -1,19 +1,9 @@
 from django.db import models
+from dataset.models import Book
 
 # Create your models here.
 
-class Book(models.Model):
-    title = models.CharField(max_length=255)  
-    author = models.JSONField()
-    published_date = models.CharField(max_length=20)
-    isbn_number = models.CharField(max_length=20, unique=True) 
-    page_count = models.IntegerField(null=True, blank=True)
-    cover_image = models.URLField(max_length=255, null=True, blank=True)
-    language = models.CharField(max_length=20)  
-    preview_link = models.URLField(max_length=255)
-
+class BookShow(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     def __str__(self):
-        return self.title
-
-    class Meta:
-        ordering = ['title']
+        return self.book.title
