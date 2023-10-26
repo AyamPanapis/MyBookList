@@ -4,9 +4,12 @@
 
 <p> hi </p>
 
-{% for book in books%}
-    <p> {{ book.title }} </p>
+{% for book in books%} 
+    <a href="{% url 'book:show_books' id=book.id %}"><p> {{ book.title }} </p></a>
     <p> {{ book.authors }} </p>
+    <p> {{ book.description }} </p>
+    <p> {{ book.categories }}</p>
+    <p> {{ book.popularity }}</p>
     <img src="{{ book.image }}" alt="book image">
 {% endfor %}
 
