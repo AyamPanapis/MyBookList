@@ -32,16 +32,13 @@ def result(request):
     fetched_books = data['items']
     books = []
     for book in fetched_books:
-            book_dict = {
-                'title': book['volumeInfo']['title'],
-                'image': book['volumeInfo']['imageLinks']['thumbnail'] if 'imageLinks' in book['volumeInfo'] else "",
-                'authors': ", ".join(book['volumeInfo']['authors']) if 'authors' in book['volumeInfo'] else "",
-                'publisher': book['volumeInfo']['publisher'] if 'publisher' in book['volumeInfo'] else "",
-                'info': book['volumeInfo']['infoLink'],
-                'popularity': book['volumeInfo']['ratingsCount'] if 'ratingsCount' in book['volumeInfo'] else 0,
-                'description': book['volumeInfo']['description'] if 'description' in book['volumeInfo'] else "No description available.",
-                'categories': ", ".join(book['volumeInfo']['categories']) if 'categories' in book['volumeInfo'] else 'No categories available.',
-                'id': book['id'],
-            }
-            books.append(book_dict)
+        book_dict = {
+            'title': book['volumeInfo']['title'],
+            'image': book['volumeInfo']['imageLinks']['thumbnail'] if 'imageLinks' in book['volumeInfo'] else "",
+            'authors': ", ".join(book['volumeInfo']['authors']) if 'authors' in book['volumeInfo'] else "",
+            'publisher': book['volumeInfo']['publisher'] if 'publisher' in book['volumeInfo'] else "",
+            'info': book['volumeInfo']['infoLink'],
+            'id': book['id']
+        }
+        books.append(book_dict)
     return render(request, 'result.html', {'books': books})
