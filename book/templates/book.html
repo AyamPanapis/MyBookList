@@ -19,17 +19,20 @@
     <input type="submit" value="Submit">
 </form>
 
+<p>Average Rating: {{ average_rating }}</p>
+
 <!-- Displaying existing reviews -->
 <h3>Reviews:</h3>
 {% for review in reviews %}
-    <div>
-        <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
-        <br>
-        Rating: {{ review.rating }}
-        <p>{{ review.comment }}</p>
-    </div>
+<div>
+    <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
+    <br>
+    Rating: {{ review.rating }}
+    <p>{{ review.comment }}</p>
+</div>
+
 {% empty %}
-    <p>No reviews yet. Be the first to review this book!</p>
+<p>No reviews yet. Be the first to review this book!</p>
 {% endfor %}
 
 {% endblock %}

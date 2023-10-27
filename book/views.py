@@ -6,6 +6,7 @@ from .models import Review
 from .forms import ReviewForm
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.db.models import Avg
 
 @login_required
 def show_books(request, book_id):
@@ -25,5 +26,9 @@ def show_books(request, book_id):
     else:
         form = ReviewForm()
 
-    context = {'book': book, 'reviews': reviews, 'form': form}
+    average_rating = round(reviews.aggregate(Avg('rating'))['rating__avg'], 2)  # Assuming 'rating' is the field in your Review model.
+    if average_rating is None:
+        average_rating = "No ratings yet"
+
+    context = {'book': book, 'reviews': reviews, 'form': form, 'average_rating': average_rating}
     return render(request, 'book.html', context)
