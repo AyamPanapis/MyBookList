@@ -12,7 +12,6 @@ def show_books(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     print(type(book))
     reviews = Review.objects.filter(book_id=book_id).order_by('-pub_date')
-    print(reviews)
 
     if request.method == 'POST':
         form = ReviewForm(request.POST)
