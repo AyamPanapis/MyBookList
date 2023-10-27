@@ -1,9 +1,7 @@
 from django.db import models
+from dataset.models import Book
 
-class Book(models.Model):
-    title = models.CharField(max_length=200)
-    authors = models.CharField(max_length=200)
-    publisher = models.CharField(max_length=200)
-    description = models.TextField()
-    image_link = models.URLField()
-    category = models.CharField(max_length=200)
+class Category(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.book.categories
