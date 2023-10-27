@@ -18,6 +18,20 @@
     {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
+<form method="POST"></form>
+    <div class="">
+        <input id="default-radio-1" type="radio" name="default-radio" onclick="toRead('{{ book.id }}','{{user.id}}')" value="0"  class="">
+        <label for="default-radio-1">To Read</label>
+        <div class="">
+        <input id="default-radio-2" type="radio" name="default-radio" onclick="reading('{{ book.id }}','{{user.id}}')" value="1"  class="">
+        <label for="default-radio-2">Reading</label>
+        </div>
+        <div>
+        <input id="default-radio-3" type="radio" name="default-radio" onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2"  class="">
+        <label for="default-radio-3">Finish reading</label>
+        </div>
+    </div>
+</form>
 
 <p>Average Rating: {{ average_rating }}</p>
 
@@ -34,5 +48,48 @@
 {% empty %}
 <p>No reviews yet. Be the first to review this book!</p>
 {% endfor %}
+
+<script>
+
+function toRead(book_id,user_id) {
+    const csrfToken = '{{csrf_token}}';
+    fetch("/book/to-read/" + book_id + "/" + user_id + "/", {
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+        },
+    })
+
+    return false
+}
+
+function reading(book_id,user_id) {
+    const csrfToken = '{{csrf_token}}';
+    fetch("/book/reading/" + book_id + "/" + user_id + "/", {
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+        },
+    })
+
+    return false
+}
+
+function finishedReading(book_id,user_id) {
+    const csrfToken = '{{csrf_token}}';
+    fetch("/book/finished-reading/" + book_id + "/" + user_id + "/", {
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+        },
+    })
+
+    return false
+}
+
+</script>
 
 {% endblock %}
