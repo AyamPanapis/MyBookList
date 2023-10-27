@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from dataset.models import Book
-from .models import Review
+from .models import Review, WishList
 from .forms import ReviewForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 import datetime
 from django.db.models import Avg
 
@@ -32,3 +33,42 @@ def show_books(request, book_id):
 
     context = {'book': book, 'reviews': reviews, 'form': form, 'average_rating': average_rating}
     return render(request, 'book.html', context)
+
+@login_required
+def to_read(request, book_id, user_id):
+    book = Book.objects.get(pk=book_id)
+    user = User.objects.get(pk=user_id)
+    try:
+        wishlist = WishList.objects.get(book=book.pk, user=user)
+        wishlist.book_list = 0
+        wishlist.save()
+    except WishList.DoesNotExist:
+        WishList.objects.create(book=book.pk, user=user, book_list=0)
+    return HttpResponse(b"TO_READ", status=201)
+
+@login_required
+def reading(request, book_id, user_id):
+    book = Book.objects.get(pk=book_id)
+    user = User.objects.get(pk=user_id)
+    try:
+        wishlist = WishList.objects.get(book=book.pk, user=user)
+        wishlist.book_list = 1
+        wishlist.save()
+    except WishList.DoesNotExist:
+        WishList.objects.create(book=book.pk, user=user, book_list=1)
+    return HttpResponse(b"READING", status=201)
+
+@login_required
+def finished_reading(request, book_id, user_id):
+    book = Book.objects.get(pk=book_id)
+    user = User.objects.get(pk=user_id)
+    try:
+        wishlist = WishList.objects.get(book=book.pk, user=user)
+        wishlist.book_list = 2
+        wishlist.save()
+    except WishList.DoesNotExist:
+        WishList.objects.create(book=book.pk, user=user, book_list=2)
+    return HttpResponse(b"FINISH", status=201)
+
+
+    

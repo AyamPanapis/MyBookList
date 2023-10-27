@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Avg
 from dataset.models import Book
+from django.contrib.auth.models import User
 
 class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
@@ -16,5 +17,11 @@ class Review(models.Model):
     )
     rating = models.IntegerField(choices=RATING_CHOICES)
 
+
     def __str__(self):
-        return f'{self.user_name} - {self.book.title}'  # Helpful for the admin interface
+        return f'{self.user_name} - {self.book.title}'
+    
+class WishList(models.Model):
+    book = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book_list = models.IntegerField()
