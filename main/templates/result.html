@@ -5,7 +5,7 @@
 <p> hi </p>
 {% if books %}
     {% for book in books%} 
-        <a href="{% url 'book:show_books' title=book.title %}"><p> {{ book.title }} </p></a>
+        <a href="{% url 'book:show_books' book.pk %}"><p> {{ book.title }} </p></a>
         <p> {{ book.author }} </p>
         <p> {{ book.description }} </p>
         <p> {{ book.categories }}</p>
