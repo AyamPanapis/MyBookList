@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Books in {{ category_name }} Category</h1>
+
+<ul>
+    {% for book in books %}
+        <img src="{{ book.image_link }}" alt=" {{ book.title }}"/>
+        <a href="{% url 'book:show_books' book.pk %}"><li>{{ book.title }} by {{ book.author }}</li></a>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
