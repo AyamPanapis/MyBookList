@@ -1,16 +1,35 @@
 {% extends 'base.html' %}
-{% block content%}
 
-<p>{{title}}</p>
+{% block content %}
+<!-- Displaying the book details -->
+<img src="{{ book.image_link }}" alt="book image">
+<p>{{ book.author }}</p>
+<p>{{ book.publisher }}</p>
+<br>
+<p>{{ book.description }}</p>
+<br>
+<p>{{ book.categories }}</p>
 
-{% for book in books %}
-    <img src="{{ book.image_link }}" alt="book image">
-    <p>{{book.author}}</p>
-    <p>{{book.publisher}}</p>
-    <br>
-    <p>{{book.description}}</p>
-    <br>
-    <p>{{book.categories}}</p>
+
+<!-- Review Form -->
+<h3>Submit your review:</h3>
+<form method="post" action="/book/{{ book.pk }}/">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<!-- Displaying existing reviews -->
+<h3>Reviews:</h3>
+{% for review in reviews %}
+    <div>
+        <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
+        <br>
+        Rating: {{ review.rating }}
+        <p>{{ review.comment }}</p>
+    </div>
+{% empty %}
+    <p>No reviews yet. Be the first to review this book!</p>
 {% endfor %}
 
-{% endblock content %}
+{% endblock %}
