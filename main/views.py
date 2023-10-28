@@ -7,8 +7,12 @@ from .models import UserBook
 
 @login_required(login_url='auth/login/')
 def show_main(request):
+    # Retrieve the first 10 books, ordered by a field (e.g., publication date)
+    books = Book.objects.order_by('categories')[:10]
+
     context = {
         'username': request.user.username,
+        'books': books,
     }
     return render(request, 'main.html', context)
 
