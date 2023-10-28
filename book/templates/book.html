@@ -2,94 +2,147 @@
 
 {% block content %}
 <!-- Displaying the book details -->
+
 <img src="{{ book.image_link }}" alt="book image">
+<br>
 <p>{{ book.author }}</p>
+<br>
 <p>{{ book.publisher }}</p>
 <br>
 <p>{{ book.description }}</p>
 <br>
 <p>{{ book.categories }}</p>
-
+<br>
 
 <!-- Review Form -->
 <h3>Submit your review:</h3>
-<form method="post" action="/book/{{ book.pk }}/">
+<form method="post" id="form" action="/book/{{ book.pk }}/">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
 <form method="POST"></form>
+<div class="">
+    <input id="default-radio-1" type="radio" name="default-radio" onclick="toRead('{{ book.id }}','{{user.id}}')"
+        value="0" class="">
+    <label for="default-radio-1">To Read</label>
     <div class="">
-        <input id="default-radio-1" type="radio" name="default-radio" onclick="toRead('{{ book.id }}','{{user.id}}')" value="0"  class="">
-        <label for="default-radio-1">To Read</label>
-        <div class="">
-        <input id="default-radio-2" type="radio" name="default-radio" onclick="reading('{{ book.id }}','{{user.id}}')" value="1"  class="">
+        <input id="default-radio-2" type="radio" name="default-radio" onclick="reading('{{ book.id }}','{{user.id}}')"
+            value="1" class="">
         <label for="default-radio-2">Reading</label>
-        </div>
-        <div>
-        <input id="default-radio-3" type="radio" name="default-radio" onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2"  class="">
-        <label for="default-radio-3">Finish reading</label>
-        </div>
     </div>
-</form>
-
-<p>Average Rating: {{ average_rating }}</p>
-
-<!-- Displaying existing reviews -->
-<h3>Reviews:</h3>
-{% for review in reviews %}
-<div>
-    <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
-    <br>
-    Rating: {{ review.rating }}
-    <p>{{ review.comment }}</p>
+    <div>
+        <input id="default-radio-3" type="radio" name="default-radio"
+            onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
+        <label for="default-radio-3">Finish reading</label>
+    </div>
 </div>
+</form>
+<div id="reviewsection">
+    <p>Average Rating: {{ average_rating }}</p>
 
-{% empty %}
-<p>No reviews yet. Be the first to review this book!</p>
-{% endfor %}
+    <!-- Displaying existing reviews -->
+    <h3>Reviews:</h3>
+    {% for review in reviews %}
+    <div>
+        <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
+        <br>
+        Rating: {{ review.rating }}
+        <p>{{ review.comment }}</p>
+    </div>
+    {% empty %}
+    <p>No reviews yet. Be the first to review this book!</p>
+    {% endfor %}
+</div>
 
 <script>
 
-function toRead(book_id,user_id) {
-    const csrfToken = '{{csrf_token}}';
-    fetch("/book/to-read/" + book_id + "/" + user_id + "/", {
-        method:"POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-        },
-    })
+    function toRead(book_id, user_id) {
+        const csrfToken = '{{csrf_token}}';
+        fetch("/book/to-read/" + book_id + "/" + user_id + "/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+        })
 
-    return false
-}
+        return false
+    }
 
-function reading(book_id,user_id) {
-    const csrfToken = '{{csrf_token}}';
-    fetch("/book/reading/" + book_id + "/" + user_id + "/", {
-        method:"POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-        },
-    })
+    function reading(book_id, user_id) {
+        const csrfToken = '{{csrf_token}}';
+        fetch("/book/reading/" + book_id + "/" + user_id + "/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+        })
 
-    return false
-}
+        return false
+    }
 
-function finishedReading(book_id,user_id) {
-    const csrfToken = '{{csrf_token}}';
-    fetch("/book/finished-reading/" + book_id + "/" + user_id + "/", {
-        method:"POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-        },
-    })
+    function finishedReading(book_id, user_id) {
+        const csrfToken = '{{csrf_token}}';
+        fetch("/book/finished-reading/" + book_id + "/" + user_id + "/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+        })
 
-    return false
-}
+        return false
+    }
 
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#form').submit(function (event) {
+            event.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '/book/{{ book.pk }}/',
+                method: 'POST',
+                data: formData,
+                success: function (data) {
+                    $('#reviewsection').empty(); // Clear the previous reviews
+                    var reviewHtml = "";
+                    
+                    // Iterate over the new reviews data
+                    for (var i = data.reviews.length-1; i >= 0; i--) {
+                        var review = data.reviews[i];
+
+                        // Format the date manually
+                        var pubDate = new Date(review.pub_date);
+                        var formattedDate = pubDate.toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true });
+
+                        // Create the new review HTML
+                        reviewHtml += `
+                        <div class="review">
+                            <strong>${review.user_name}</strong> (${formattedDate})
+                            <p>Rating: ${review.rating}</p>
+                            <p>${review.comment}</p>
+                        </div>`;
+                    }
+                    $('#reviewsection').html(reviewHtml);
+
+                    // Clear the input fields for the rating and comment
+                    $('#id_rating').val('');
+                    $('#id_comment').val('');
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+    });
 </script>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from dataset.models import Book
 from .models import Review, WishList
@@ -23,7 +23,8 @@ def show_books(request, book_id):
             new_review.user_name = request.user.username
             new_review.pub_date = datetime.datetime.now()
             new_review.save()
-            return HttpResponseRedirect(f"/book/{book_id}/")
+            dataNew = list(Review.objects.filter(book_id=book_id).values())
+            return JsonResponse({'reviews': dataNew})
     else:
         form = ReviewForm()
 
@@ -71,6 +72,3 @@ def finished_reading(request, book_id, user_id):
     except WishList.DoesNotExist:
         WishList.objects.create(book=book.pk, user=user, book_list=2)
     return HttpResponse(b"FINISH", status=201)
-
-
-    
