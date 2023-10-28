@@ -4,11 +4,21 @@ from dataset.models import Book
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .models import UserBook
+import random
+from django.http import JsonResponse
+from django.http import HttpResponse
+from django.core import serializers
 
 @login_required(login_url='auth/login/')
 def show_main(request):
-    # Retrieve the first 10 books, ordered by a field (e.g., publication date)
-    books = Book.objects.order_by('categories')[:10]
+# Get the total number of books in the dataset
+    total_books = Book.objects.count()
+
+    # Generate a list of 10 unique random indices to select 10 random books
+    random_indices = random.sample(range(1, total_books + 1), 10)
+
+    # Retrieve the 10 random books
+    books = Book.objects.filter(pk__in=random_indices)
 
     context = {
         'username': request.user.username,
@@ -31,3 +41,10 @@ def result(request):
     }
 
     return render(request, 'result.html', context)
+
+def get_random_books_json(request):
+    total_books = Book.objects.count()
+    random_indices = random.sample(range(1, total_books + 1), 10)
+    getbook = Book.objects.filter(pk__in=random_indices)
+    data = serializers.serialize('json', getbook)
+    return HttpResponse(data, content_type='application/json')

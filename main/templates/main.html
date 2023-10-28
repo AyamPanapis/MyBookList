@@ -31,16 +31,31 @@
 <p>Education</p>
 
 <h3> Hi! {{ username }}, welcome to MyBookList! Here are some lists of books that we think you may like.</h3>
-<ul>
-    {% for book in books %}
-        <li>
-            <a href="{% url 'book:show_books' book.pk %}">{{ book.title }}</a>
-            <p>Author: {{ book.author }}</p>
-            <p>Description: {{ book.description }}</p>
-            <img src="{{ book.image_link }}" alt="book image">
-        </li>
-    {% endfor %}
-</ul>
+<ul id="show_random_books"></ul>
+
+
+<script>
+    async function getProducts() {
+        return fetch(`./get-product/`).then((res) => res.json())
+    }
+    async function refreshBook() {
+        document.getElementById("show_random_books").innerHTML = "";
+        const books = await getProducts();
+        let htmlString = "";
+        books.forEach((item) => {
+            htmlString += `
+                    <p>${item.fields.title}</p>
+                    <p>${item.fields.author}</p>
+                    <p>${item.fields.description}</p>
+                    <img src="${item.fields.image_link}" alt="book image">
+                `;
+        });
+        
+        document.getElementById("show_random_books").innerHTML = htmlString;
+    }
+
+    refreshBook()
+</script>
 
 
 {% endblock content %}
