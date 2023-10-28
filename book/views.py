@@ -27,8 +27,10 @@ def show_books(request, book_id):
     else:
         form = ReviewForm()
 
-    average_rating = round(reviews.aggregate(Avg('rating'))['rating__avg'], 2)  # Assuming 'rating' is the field in your Review model.
-    if average_rating is None:
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']  # Assuming 'rating' is the field in your Review model.
+    if average_rating is not None:
+        average_rating = round(average_rating, 2)
+    else:    
         average_rating = "No ratings yet"
 
     context = {'book': book, 'reviews': reviews, 'form': form, 'average_rating': average_rating}
