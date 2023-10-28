@@ -20,7 +20,7 @@ def books_by_category(request, category_name):
     return render(request, template_name, {'books': books, 'category_name': category_name})
 
 
-def get_book_json(request):
-    book = Book.objects.filter(categories='Fiction')
+def get_book_json(request,category_name):
+    book = Book.objects.filter(categories=category_name)
     data = serializers.serialize('json', book)
     return HttpResponse(data, content_type='application/json')
