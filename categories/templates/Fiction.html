@@ -1,29 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Books in {{ category_name }} Category</h1>
 
-<ul id="books_list">
-</ul>
+<h1 class="text-2xl font-bold mb-4">Books in {{ category_name }} Category</h1>
 
-<button onclick="refreshBooks()">Load Books</button>
+<div id="books_list" class="grid grid-cols-4 gap-4">
+</div>
 
 <script>
-    async function getBooks() {
-        return fetch("{% url 'categories:get_book_json' %}").then((res) => res.json())
+    const bookBaseURL = "/book/";
+</script>
+
+<script>
+    const categoryName = "{{ category_name }}";
+    async function getBooks(categoryName) {
+        return fetch(`./books_json/`).then((res) => res.json())
     }
 
     async function refreshBooks() {
-        const categoryName = "Fiction";
         document.getElementById("books_list").innerHTML = "";
         const books = await getBooks(categoryName);
         let htmlString = "";
         books.forEach((item) => {
-            htmlString += `<li>${item.fields.title} by ${item.fields.author}</li>`;
+            const truncatedDescription = item.fields.description.split(" ").slice(0, 50).join(" ") + (item.fields.description.split(" ").length > 50 ? "..." : "");
+            const bookUrl = `${bookBaseURL}${item.pk}/`;
+            htmlString += `
+                <div class="group relative">
+                    <a href="${bookUrl}">
+                        <img class="w-24 h-24 object-cover rounded transition-transform transform group-hover:scale-105" src="${item.fields.image_link}" alt="${item.fields.title}" data-description="${item.fields.description}">
+                    </a>
+                    <div class="hidden absolute top-full left-0 bg-gray-800 text-white p-2 rounded font-normal text-sm max-w-xs max-h-56 overflow-auto z-10 group-hover:block">${truncatedDescription}</div>
+                    <a href="${bookUrl}" class="block mt-2 text-lg text-center">${item.fields.title} by ${item.fields.author}</a>
+                </div>
+                `;
         });
         document.getElementById("books_list").innerHTML = htmlString;
     }
+    refreshBooks()
 </script>
-
 
 {% endblock content %}
