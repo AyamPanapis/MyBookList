@@ -3,11 +3,27 @@
 {% block content %}
 <h1>Books in {{ category_name }} Category</h1>
 
-<ul>
-    {% for book in books %}
-        <img src="{{ book.image_link }}" alt=" {{ book.title }}"/>
-        <a href="{% url 'book:show_books' book.pk %}"><li>{{ book.title }} by {{ book.author }}</li></a>
-    {% endfor %}
+<ul id="books_list">
 </ul>
+
+<button onclick="refreshBooks()">Load Books</button>
+
+<script>
+    async function getBooks() {
+        return fetch("{% url 'categories:get_book_json' %}").then((res) => res.json())
+    }
+
+    async function refreshBooks() {
+        const categoryName = "Fiction";
+        document.getElementById("books_list").innerHTML = "";
+        const books = await getBooks(categoryName);
+        let htmlString = "";
+        books.forEach((item) => {
+            htmlString += `<li>${item.fields.title} by ${item.fields.author}</li>`;
+        });
+        document.getElementById("books_list").innerHTML = htmlString;
+    }
+</script>
+
 
 {% endblock content %}
