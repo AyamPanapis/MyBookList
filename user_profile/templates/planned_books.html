@@ -1,0 +1,10 @@
+<h1>Welcome, {{ username }}</h1>
+<p>Date Joined: {{ date_joined }}</p>
+
+<h2>Books Planned to Read</h2>
+<ul>
+    {% for book in planned_to_read_books %}
+        <li><a href="{% url 'book:show_books' book.pk %}">{{ book.title }}</a></li>
+        <li><img src="{{ book.image_link }}"></li>
+    {% endfor %}
+</ul>
