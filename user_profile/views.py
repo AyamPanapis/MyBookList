@@ -6,6 +6,8 @@ from dataset.models import Book
 from user_profile.models import UserProfile
 from book.models import WishList
 from django.http import JsonResponse
+from django.core import serializers
+from django.http import HttpResponse
 
 @login_required
 def show_profile(request):
@@ -28,4 +30,29 @@ def show_profile(request):
         'completed_books': completed_books,
     }
     return render(request, 'profile.html', context)
+
+def get_planned_json(request):
+    user = request.user
+
+    planned_to_read_book_ids = WishList.objects.filter(user=user, book_list=0).values_list('book', flat=True)
+
+    planned_to_read_books = Book.objects.filter(id__in=planned_to_read_book_ids)
+    return HttpResponse(serializers.serialize('json', planned_to_read_books))
+
+def get_reading_json(request):
+    user = request.user
+
+    reading_book_ids = WishList.objects.filter(user=user, book_list=1).values_list('book', flat=True)
+
+    reading_books = Book.objects.filter(id__in=reading_book_ids)
+    return HttpResponse(serializers.serialize('json', reading_books))
+
+def get_completed_json(request):
+    user = request.user
+
+    completed_book_ids = WishList.objects.filter(user=user, book_list=2).values_list('book', flat=True)
+
+    completed_books = Book.objects.filter(id__in=completed_book_ids)
+    return HttpResponse(serializers.serialize('json', completed_books))
+
 
