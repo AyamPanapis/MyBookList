@@ -24,3 +24,14 @@ def get_book_json(request,category_name):
     book = Book.objects.filter(categories=category_name)
     data = serializers.serialize('json', book)
     return HttpResponse(data, content_type='application/json')
+
+def show_all(request):
+    books = Book.objects.all()
+    return render(request,'all.html',{'books':books})
+
+def get_book_json_all(request):
+    book = Book.objects.all()
+    data = serializers.serialize('json', book)
+    return HttpResponse(serializers.serialize('json', book))
+
+
