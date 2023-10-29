@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>All Book Categories</h1>
+{% include 'navbar.html' %}
 
-<ul>
-    {% for category in categories %}
-        <li>
-            <a href="{% url 'categories:books_by_category' category_name=category %}">{{ category }}</a>
-        </li>
-    {% endfor %}
-</ul>
+<h1 class="text-5xl font-bold mb-4 text-center"> Category </h1>
+
+<div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
+    <button href data-category="all" type="button" class="category-button  border border-white hover:border-[#00ADB5]  bg-[#393E46] focus:ring-4 focus:outline-[#00ADB5] focus:ring-[#00ADB5] rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">All categories</button>
+    <button data-category="Art" type="button" class="category-button  border border-white hover:border-[#393E46]  bg-[#00ADB5] focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">Art</button>
+    <button data-category="Economics" type="button" class="category-button  border border-white hover:border-[#393E46]  bg-[#00ADB5] focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">Economics</button>
+    <button data-category="Fiction" type="button" class="category-button  border border-white hover:border-[#393E46]  bg-[#00ADB5] focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">Fiction</button>
+    <button data-category="History" type="button" class="category-button  border border-white hover:border-[#393E46]  bg-[#00ADB5] focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">History</button>
+    <button data-category="Philosophy" type="button" class="category-button  border border-white hover:border-[#393E46]  bg-[#00ADB5] focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">Philosophy</button>
+    <button data-category="Science" type="button" class="category-button  border border-white hover:border-[#393E46]  bg-[#00ADB5] focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 ">Science</button>
+</div>
 
 {% include 'footer.html' %}
 

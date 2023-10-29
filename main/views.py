@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.core import serializers
 
-@login_required(login_url='auth/login/')
+
 def show_main(request):
 # Get the total number of books in the dataset
     total_books = Book.objects.count()

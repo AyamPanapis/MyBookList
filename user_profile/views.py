@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.http import HttpResponse
 
-@login_required
+@login_required(login_url='/auth/login/')
 def show_profile(request, id):
     user = request.user
     date_joined_wib = user.date_joined.astimezone(timezone.get_current_timezone())
