@@ -6,26 +6,30 @@
 <div class="relative flex-col px-4 pt-6">
     <div class="flex">
 
-        <!-- Book cover section -->
-        <div class="flex-1 flex-col p-10">
-            <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
-            <p>Author:</p>
-            <p><strong>{{ book.author }}</strong></p>
-            <p>Publisher:</p>
-            <p><strong>{{ book.publisher }}</strong></p>
-            <p>Categories:</p>
-            <p><strong>{{ book.categories }}</strong></p>
-        </div>
+        <!-- Combined section for book cover and details -->
+        <div class="flex-1 flex-col p-10" style="display: flex; flex-direction: row;">
 
-        <!-- Vertical Divider (the white vertical line) -->
-        <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
-        <!-- self-stretch will make it take the full height of its container -->
+            <!-- Book cover subsection -->
+            <div style="flex: 1;">
+                <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
+                <p>Author:</p>
+                <p><strong>{{ book.author }}</strong></p>
+                <p>Publisher:</p>
+                <p><strong>{{ book.publisher }}</strong></p>
+                <p>Categories:</p>
+                <p><strong>{{ book.categories }}</strong></p>
+            </div>
 
-        <!-- Book details section -->
-        <div class="max-w-full h-max flex-1 p-10" style="flex: 1; padding: 10px;">
-            <p><strong>{{ book.title }} </strong></p>
-            <hr>
-            <p>{{ book.description }}</p>
+            <!-- Vertical Divider (the white vertical line) -->
+            <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
+
+            <!-- Book details subsection -->
+            <div class="max-w-full h-max flex-1 p-10" style="flex: 1; padding: 10px;">
+                <p><strong>{{ book.title }} </strong></p>
+                <hr>
+                <p>{{ book.description }}</p>
+            </div>
+
         </div>
 
     </div>
@@ -56,21 +60,26 @@
             </div>
         </div>
         </form>
-        <div id="reviewsection">
+        <div>
             <p>Average Rating: {{ average_rating }}</p>
 
             <!-- Displaying existing reviews -->
             <h3>Reviews:</h3>
             {% for review in reviews %}
-            <div class="w-fit">
-                <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
-                <br>
-                Rating: {{ review.rating }}
-                <p class="">{{ review.comment }}</p>
+            <div>
+                <div class="py-4" id="reviewsection">
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 border-2 border-gray-200 rounded overflow-hidden">
+                        <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
+                        <br>
+                        Rating: {{ review.rating }}
+                        <!-- Adjusted classes below for text wrapping and overflow handling -->
+                        <p class="text-sm break-words overflow-auto">{{ review.comment }}</p>
+                    </div>
+                    {% empty %}
+                    <p>No reviews yet. Be the first to review this book!</p>
+                    {% endfor %}
+                </div>
             </div>
-            {% empty %}
-            <p>No reviews yet. Be the first to review this book!</p>
-            {% endfor %}
         </div>
     </div>
 </div>
@@ -145,11 +154,14 @@
 
                         // Create the new review HTML
                         reviewHtml += `
-                        <div class="review">
-                            <strong>${review.user_name}</strong> (${formattedDate})
-                            <p>Rating: ${review.rating}</p>
-                            <p>${review.comment}</p>
-                        </div>`;
+                        <div class="py-2">
+                            <div class="review w-full md:w-1/2 lg:w-1/3 p-4 border-2 border-gray-200 rounded overflow-hidden">
+                                <strong>${review.user_name}</strong> (${formattedDate})
+                                <p>Rating: ${review.rating}</p>
+                                <p class="text-sm break-words overflow-auto">${review.comment}</p>
+                            </div>
+                        </div>
+                        `;
                     }
                     $('#reviewsection').html(reviewHtml);
 
