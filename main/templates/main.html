@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
 {% include 'navbar.html' %}
 
@@ -35,6 +36,10 @@
 
 
 <script>
+    const bookBaseURL = "/book/";
+</script>
+
+<script>
     async function getProducts() {
         return fetch(`./get-product/`).then((res) => res.json())
     }
@@ -43,11 +48,12 @@
         const books = await getProducts();
         let htmlString = "";
         books.forEach((item) => {
+            const bookUrl = `${bookBaseURL}${item.pk}/`;
             htmlString += `
-                    <p>${item.fields.title}</p>
-                    <p>${item.fields.author}</p>
-                    <p>${item.fields.description}</p>
-                    <img src="${item.fields.image_link}" alt="book image">
+                    <a href="${bookUrl}" class="block mt-2 text-lg text-center">${item.fields.title} by ${item.fields.author}</a>
+                    <p class="block mt-2 text-lg text-center">${item.fields.author}</p>
+                    <p class="block mt-2 text-lg text-center">${item.fields.description}</p>
+                    <img src="${item.fields.image_link}" alt="book image" class="center">
                 `;
         });
         
