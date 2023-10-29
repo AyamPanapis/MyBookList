@@ -2,7 +2,6 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-
 <div class="flex-col">
     <div class="flex justify-center items-center mt-40">
         <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-white-900 md:text-2xl lg:text-4xl">Discover new worlds, <span class="underline underline-offset-3 decoration-8 decoration-blue-400 ">one book at a time.</span></h1>
@@ -36,7 +35,7 @@
                 <div class="group relative">
                     <a href="${bookUrl}" class="block">
                         <img class="w-full rounded-lg" src="${item.fields.image_link}" alt="${item.fields.title}">
-                        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-2 text-white text-xs rounded-b-lg transition-opacity opacity-0 group-hover:opacity-100">
+                        <div class=" bottom-0 left-0 right-0 bg-black bg-opacity-60 p-2 text-white text-xs rounded-b-lg transition-opacity opacity-0 group-hover:opacity-100">
                             <strong>${item.fields.title} by ${item.fields.author}</strong><br>
 
                         </div>
@@ -51,5 +50,6 @@
     refreshBook()
 </script>
 
+{% include 'footer.html' %}
 
 {% endblock content %}
