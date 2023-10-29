@@ -31,7 +31,7 @@ Inspired by "MyAnimeList.com" our website will use similiar listing system, but 
 - Admin
 
 ## Github Action Badge
-![Github Action](https://github.com/HezBoomin/AyamPanapis/actions/workflows/WORKFLOW-FILE/badge.svg)
+![Github Action](https://github.com/HezBoomin/AyamPanapis/actions/workflows/django.yml/badge.svg)
 
 
 <details>
