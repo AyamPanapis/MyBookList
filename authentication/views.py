@@ -41,4 +41,4 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect('/auth/login/')
+    return HttpResponseRedirect('/')

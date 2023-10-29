@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 import datetime
 from django.db.models import Avg
 
-@login_required
+@login_required(login_url='/auth/login/')
 def show_books(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     print(type(book))
