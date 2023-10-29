@@ -1,58 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <!-- Displaying the book details -->
+<div class="relative flex-col px-4 pt-6">
+    <div class="flex">
 
-<img src="{{ book.image_link }}" alt="book image">
-<br>
-<p>{{ book.author }}</p>
-<br>
-<p>{{ book.publisher }}</p>
-<br>
-<p>{{ book.description }}</p>
-<br>
-<p>{{ book.categories }}</p>
-<br>
+        <!-- Book cover section -->
+        <div class="flex-1 flex-col p-10">
+            <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
+            <p>Author:</p>
+            <p><strong>{{ book.author }}</strong></p>
+            <p>Publisher:</p>
+            <p><strong>{{ book.publisher }}</strong></p>
+            <p>Categories:</p>
+            <p><strong>{{ book.categories }}</strong></p>
+        </div>
 
-<!-- Review Form -->
-<h3>Submit your review:</h3>
-<form method="post" id="form" action="/book/{{ book.pk }}/">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
-<form method="POST"></form>
-<div class="">
-    <input id="default-radio-1" type="radio" name="default-radio" onclick="toRead('{{ book.id }}','{{user.id}}')"
-        value="0" class="">
-    <label for="default-radio-1">To Read</label>
-    <div class="">
-        <input id="default-radio-2" type="radio" name="default-radio" onclick="reading('{{ book.id }}','{{user.id}}')"
-            value="1" class="">
-        <label for="default-radio-2">Reading</label>
+        <!-- Vertical Divider (the white vertical line) -->
+        <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
+        <!-- self-stretch will make it take the full height of its container -->
+
+        <!-- Book details section -->
+        <div class="max-w-full h-max flex-1 p-10" style="flex: 1; padding: 10px;">
+            <p><strong>{{ book.title }} </strong></p>
+            <hr>
+            <p>{{ book.description }}</p>
+        </div>
+
     </div>
+
+    <hr>
+    <!-- Review Form -->
     <div>
-        <input id="default-radio-3" type="radio" name="default-radio"
-            onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
-        <label for="default-radio-3">Finish reading</label>
-    </div>
-</div>
-</form>
-<div id="reviewsection">
-    <p>Average Rating: {{ average_rating }}</p>
+        <h3>Submit your review:</h3>
+        <form method="post" id="form" action="/book/{{ book.pk }}/">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+        <form method="POST"></form>
+        <div class="">
+            <input id="default-radio-1" type="radio" name="default-radio"
+                onclick="toRead('{{ book.id }}','{{user.id}}')" value="0" class="">
+            <label for="default-radio-1">To Read</label>
+            <div class="">
+                <input id="default-radio-2" type="radio" name="default-radio"
+                    onclick="reading('{{ book.id }}','{{user.id}}')" value="1" class="">
+                <label for="default-radio-2">Reading</label>
+            </div>
+            <div>
+                <input id="default-radio-3" type="radio" name="default-radio"
+                    onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
+                <label for="default-radio-3">Finish reading</label>
+            </div>
+        </div>
+        </form>
+        <div id="reviewsection">
+            <p>Average Rating: {{ average_rating }}</p>
 
-    <!-- Displaying existing reviews -->
-    <h3>Reviews:</h3>
-    {% for review in reviews %}
-    <div>
-        <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
-        <br>
-        Rating: {{ review.rating }}
-        <p>{{ review.comment }}</p>
+            <!-- Displaying existing reviews -->
+            <h3>Reviews:</h3>
+            {% for review in reviews %}
+            <div class="w-fit">
+                <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
+                <br>
+                Rating: {{ review.rating }}
+                <p class="">{{ review.comment }}</p>
+            </div>
+            {% empty %}
+            <p>No reviews yet. Be the first to review this book!</p>
+            {% endfor %}
+        </div>
     </div>
-    {% empty %}
-    <p>No reviews yet. Be the first to review this book!</p>
-    {% endfor %}
 </div>
 
 <script>
@@ -114,9 +134,9 @@
                 success: function (data) {
                     $('#reviewsection').empty(); // Clear the previous reviews
                     var reviewHtml = "";
-                    
+
                     // Iterate over the new reviews data
-                    for (var i = data.reviews.length-1; i >= 0; i--) {
+                    for (var i = data.reviews.length - 1; i >= 0; i--) {
                         var review = data.reviews[i];
 
                         // Format the date manually
