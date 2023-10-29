@@ -10,7 +10,7 @@ from django.core import serializers
 from django.http import HttpResponse
 
 @login_required(login_url='/auth/login/')
-def show_profile(request):
+def show_profile(request, id):
     user = request.user
     date_joined_wib = user.date_joined.astimezone(timezone.get_current_timezone())
 
@@ -22,12 +22,20 @@ def show_profile(request):
     reading_books = Book.objects.filter(id__in=reading_book_ids)
     completed_books = Book.objects.filter(id__in=completed_book_ids)
 
+    # Count the total number of books in each section
+    planned_count = planned_to_read_books.count()
+    reading_count = reading_books.count()
+    completed_count = completed_books.count()
+
     context = {
         'username': user.username,
         'date_joined': date_joined_wib,
         'planned_to_read_books': planned_to_read_books,
         'reading_books': reading_books,
         'completed_books': completed_books,
+        'planned_count': planned_count,
+        'reading_count': reading_count,
+        'completed_count': completed_count,
     }
     return render(request, 'profile.html', context)
 
