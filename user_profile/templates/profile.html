@@ -1,30 +1,59 @@
 {% extends 'base.html' %}
 
-{% block content %}
 
-<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-  <a href="#">
+
+{% block content %}
+{% load static %}
+
+{% include "navbar.html" %}
+<div class="flex py-5">
+  <!-- Profile Card Section -->
+  <div class="max-w-xs max-h-fit p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-[#393E46] dark:border-gray-700">
+    <a href="#">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Welcome {{username}}</h5>
-  </a>
-  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Your literary journey began here on this page, and you've been reading since {{date_joined}}</p>
-  <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-      Read more
+    </a>
+    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Your literary journey began here on this page, and you've been reading since {{date_joined}}</p>
+    <a href="/" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 bg-[#00ADB5] hover:bg-teal-700 focus:ring-teal-700">
+      Discover New Books
       <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
       </svg>
-  </a>
+    </a>
+    <img class="pt-20 h-25 mr-10" src="{% static 'haruhi.png' %}" alt="Logo"/>
+    
+  </div>
+
+  <!-- Books Sections -->
+  <div class="ml-4">
+    <div class="mb-4">
+      <h1 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><mark class="px-2 text-white bg-[#00ADB5] rounded dark:bg-[#00ADB5]">Planned-to-Read Books</mark></h1>
+      <div class="scrollable-books">
+        <ul id="planned_table" class="flex flex-no-wrap overflow-x-auto text-xs">
+        </ul>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <h1 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><mark class="px-2 text-white bg-[#00ADB5] rounded dark:bg-[#00ADB5]">Currently-Reading Books</mark></h1>
+      <div class="scrollable-books">
+        <ul id="reading_table" class="flex flex-no-wrap overflow-x-auto text-xs">
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <h1 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><mark class="px-2 text-white bg-[#00ADB5] rounded dark:bg-[#00ADB5]">Completed Books</mark></h1>
+      <div class="scrollable-books">
+        <ul id="completed_table" class="flex flex-no-wrap overflow-x-auto text-xs">
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-<h1>Welcome, {{ username }}</h1>
-<p>Date Joined: {{ date_joined }}</p>
-
-<h2>Books Planned to Read</h2>
-<ul id="planned_table"></ul>
-<h2>Books Currently Reading</h2>
-<ul id="reading_table"></ul>
-<h2>Completed Books</h2>
-<ul id="completed_table"></ul>
+<script>
+  const bookBaseURL = "/book/";
+</script>
 
 <script>
   async function getPlanned() {
@@ -35,51 +64,76 @@
       const book = await getPlanned()
       let htmlString = ``
       book.forEach((item) => {
-          htmlString += `\n<li>${ item.fields.title }</a></li>
-          <li><img src="${ item.fields.image_link }"></li>
-          <li>${ item.fields.description }</li>` 
+          const bookUrl = `${bookBaseURL}${item.pk}/`;
+          htmlString += `
+          <div class="relative flex-col justify-center item-center">
+            <li class="flex-shrink-0 m-2 text-center" style="list-style-type: none;">
+              <a href="${bookUrl}">
+                <img src="${item.fields.image_link}" class="w-24 h-36 rounded-lg" style="max-width: 100%;" alt="${item.fields.title}">
+              </a>
+              <p class="text-xs mt-2">${item.fields.title}</p>
+            </li>
+          </div>
+        `
       })
-      
       document.getElementById("planned_table").innerHTML = htmlString
   }
-
   refreshPlanned()
 
   async function getReading() {
     return fetch("../get-reading/").then((res) => res.json())
-}
-async function refreshReading() {
+  }
+  async function refreshReading() {
     document.getElementById("reading_table").innerHTML = ""
     const book = await getReading()
     let htmlString = ``
     book.forEach((item) => {
-        htmlString += `\n<li>${ item.fields.title }</li>
-        <li><img src="${ item.fields.image_link }"></li>
-        <li>${ item.fields.description }</li>` 
+      const bookUrl = `${bookBaseURL}${item.pk}/`;
+      htmlString += `
+      <li class="flex-shrink-0 m-2 text-center" style="list-style-type: none;">
+        <a href="${bookUrl}">
+          <img src="${item.fields.image_link}" class="w-24 h-36 rounded-lg" style="max-width: 100%;" alt="${item.fields.title}">
+        </a>
+        <p class="text-xs mt-2">${item.fields.title}</p>
+      </li>
+      `
     })
-    
     document.getElementById("reading_table").innerHTML = htmlString
-}
+  }
+  refreshReading()
 
-refreshReading()
-
-async function getCompleted() {
-  return fetch("../get-completed/").then((res) => res.json())
-}
-async function refreshCompleted() {
-  document.getElementById("completed_table").innerHTML = ""
-  const book = await getCompleted()
-  let htmlString = ``
-  book.forEach((item) => {
-      htmlString += `\n<li>${ item.fields.title }</li>
-      <li><img src="${ item.fields.image_link }"></li>
-      <li>${ item.fields.description }</li>` 
-  })
-  
-  document.getElementById("completed_table").innerHTML = htmlString
-}
-
-refreshCompleted()
+  async function getCompleted() {
+    return fetch("../get-completed/").then((res) => res.json())
+  }
+  async function refreshCompleted() {
+    document.getElementById("completed_table").innerHTML = ""
+    const book = await getCompleted()
+    let htmlString = ``
+    book.forEach((item) => {
+      const bookUrl = `${bookBaseURL}${item.pk}/`;
+      htmlString += `
+      <li class="flex-shrink-0 m-2 text-center" style="list-style-type: none;">
+        <a href="${bookUrl}">
+          <img src="${item.fields.image_link}" class="w-24 h-36 rounded-lg" style="max-width: 100%;" alt="${item.fields.title}">
+        </a>
+        <p class="text-xs mt-2">${item.fields.title}</p>
+      </li>
+      `
+    })
+    document.getElementById("completed_table").innerHTML = htmlString
+  }
+  refreshCompleted()
 </script>
+
+<style>
+  .scrollable-books {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+  .tooltip:hover .tooltip-item {
+    visibility: visible;
+  }
+</style>
 
 {% endblock %}
