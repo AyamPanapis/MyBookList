@@ -1,21 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% include 'navbar.html' %}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 ">
+        {% if books %}
+            {% for book in books %}
+             <a href="{% url 'book:show_books' book.pk %}">
+                <div class="grid gap-4 bg-[#393E46] border border-gray-200 rounded-lg px-10 py-10 h-80">
+                    <div>
+                        <img class="h-auto max-w-full rounded-lg" src="{{ book.image_link }}" alt="{{ book.title }}">
+                    </div>
+                    <div>
+                        <button data-popover-target="popover-{{ book.pk }}" type="button">
+                            <p class="text-xs">{{ book.title }}</p>
+                        </button>
+                        <div data-popover id="popover-{{ book.pk }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0">
+                            <div class="px-3 py-0">
+                                <p>Author: {{ book.author }}</p>
+                                <p>Categories: {{ book.categories }}</p>
+                                <p>Popularity: {{ book.popularity }}</p>
+                                <p>Description: {{ book.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        {% else %}
+            <p>No books found</p>
+        {% endif %}
+    </div>
 
-<p> hi </p>
-{% if books %}
-    {% for book in books%} 
-        <a href="{% url 'book:show_books' book.pk %}"><p> {{ book.title }} </p></a>
-        <p> {{ book.author }} </p>
-        <p> {{ book.description }} </p>
-        <p> {{ book.categories }}</p>
-        <p> {{ book.popularity }}</p>
-        <img src="{{ book.image_link }}" alt="book image">
-    {% endfor %}
-{% else %}
-    <p> No books found </p>
-{% endif %}
-
-<p>{{message}}</p>
-
+    <p class="flex justify-center items-center">{{ message }}</p>
 {% endblock content %}
