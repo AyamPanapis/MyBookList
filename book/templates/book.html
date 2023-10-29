@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% include "navbar.html" %}
+
 <!-- Displaying the book details -->
 <div class="relative flex-col px-4 pt-6">
     <div class="flex">
@@ -38,7 +40,7 @@
     <!-- Review Form -->
     <div>
         <h3>Submit your review:</h3>
-        <form method="post" id="form" action="/book/{{ book.pk }}/">
+        <form method="post" id="review_form" action="/book/{{ book.pk }}/">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Submit">
@@ -61,9 +63,11 @@
         </div>
         </form>
         <div>
+            <br>
             <p>Average Rating: {{ average_rating }}</p>
 
             <!-- Displaying existing reviews -->
+            <br>
             <h3>Reviews:</h3>
             {% for review in reviews %}
             <div>
@@ -131,7 +135,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#form').submit(function (event) {
+        $('#review_form').submit(function (event) {
             event.preventDefault();
 
             var formData = $(this).serialize();
