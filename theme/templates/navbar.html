@@ -1,6 +1,6 @@
 {% load static %}
 
-<nav class="border-gray-200 bg-[#00ADB5] mb-4 ">
+<nav class="border-gray-200 bg-[#00ADB5] mb-4">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
         <a href="/" class="flex items-center">
             <img class="h-12 mr-3" src="{% static 'haruhi.png' %}" alt="Logo"/>
@@ -33,7 +33,7 @@
             </div>
         </div>
         {% else %}
-        <a><button class="right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 bg-[#222831] hover-bg-blue-700 focus:ring-blue-800">Login</button></a>
+        <a href="/auth/login/"><button class="right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 bg-[#222831] hover-bg-blue-700 focus:ring-blue-800">Login</button></a>
         {% endif %}
     </div>
 

@@ -1,92 +1,135 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="flex flex-col min-h-screen"></div>
-    {% include "navbar.html" %}
+<div class="flex flex-col"></div>
+{% include "navbar.html" %}
 
-    <!-- Displaying the book details -->
-    <div class="relative flex-col px-4">
-        <div class="flex">
+<!-- Displaying the book details -->
+<div class="relative flex-col px-4">
+    <div class="flex">
 
-            <!-- Combined section for book cover and details -->
-            <div class="flex-1 flex-col p-10" style="display: flex; flex-direction: row;">
+        <!-- Combined section for book cover and details -->
+        <div class="flex-1 flex-col p-10 " style="display: flex; flex-direction: row;">
 
-                <!-- Book cover subsection -->
-                <div style="flex: 1;">
-                    <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
-                    <p>Author:</p>
-                    <p><strong>{{ book.author }}</strong></p>
-                    <p>Publisher:</p>
-                    <p><strong>{{ book.publisher }}</strong></p>
-                    <p>Categories:</p>
-                    <p><strong>{{ book.categories }}</strong></p>
-                </div>
+            <!-- Book cover subsection -->
+            <div class="md:flex-col flex-1">
+                <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
+                <p>Author: <strong>{{ book.author }}</strong></p>
+                <p><strong>{{ book.author }}</strong></p>
+                <p>Publisher:</p>
+                <p><strong>{{ book.publisher }}</strong></p>
+                <p>Categories:</p>
+                <p><strong>{{ book.categories }}</strong></p>
+                <p>Rating:</p>
+                <p><strong>{{ average_rating }}</strong></p>
+            </div>
 
-                <!-- Vertical Divider (the white vertical line) -->
-                <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
+            <!-- Vertical Divider (the white vertical line) -->
+            <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
 
-                <!-- Book details subsection -->
-                <div class="max-w-full h-max flex-1 p-10" style="flex: 1; padding: 10px;">
-                    <p><strong>{{ book.title }} </strong></p>
-                    <hr>
-                    <p>{{ book.description }}</p>
-                </div>
-
+            <!-- Book details subsection -->
+            <div class="max-w-full h-max flex-1 p-10  " style="flex: 1; padding: 10px;">
+                <p><strong>{{ book.title }} </strong></p>
+                <hr>
+                <p>{{ book.description }}</p>
             </div>
 
         </div>
 
-        <hr>
-        <!-- Review Form -->
+    </div>
+    <div class="flex py-2 px-8 md:justify-center md:item-center">
+        <div class="pr-2">
+            <input id="default-radio-1" type="radio" name="default-radio"
+                onclick="toRead('{{ book.id }}','{{user.id}}')" value="0" class="">
+            <label for="default-radio-1">To Read</label>
+        </div>
+        <div class="pr-2">
+            <input id="default-radio-2" type="radio" name="default-radio"
+                onclick="reading('{{ book.id }}','{{user.id}}')" value="1" class="">
+            <label for="default-radio-2">Reading</label>
+        </div>
         <div>
-            <h3>Submit your review:</h3>
-            <form method="post" id="review_form" action="/book/{{ book.pk }}/">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Submit">
-            </form>
-            <form method="POST"></form>
-            <div class="">
-                <input id="default-radio-1" type="radio" name="default-radio"
-                    onclick="toRead('{{ book.id }}','{{user.id}}')" value="0" class="">
-                <label for="default-radio-1">To Read</label>
-                <div class="">
-                    <input id="default-radio-2" type="radio" name="default-radio"
-                        onclick="reading('{{ book.id }}','{{user.id}}')" value="1" class="">
-                    <label for="default-radio-2">Reading</label>
-                </div>
-                <div>
-                    <input id="default-radio-3" type="radio" name="default-radio"
-                        onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
-                    <label for="default-radio-3">Finish reading</label>
-                </div>
-            </div>
-            </form>
-            <div>
-                <br>
-                <p>Average Rating: {{ average_rating }}</p>
+            <input id="default-radio-3" type="radio" name="default-radio"
+                onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
+            <label for="default-radio-3">Finish reading</label>
+        </div>
+    </div>
 
-                <!-- Displaying existing reviews -->
-                <br>
-                <h3>Reviews:</h3>
-                {% for review in reviews %}
-                <div>
-                    <div class="py-4" id="reviewsection">
-                        <div class="w-full md:w-1/2 lg:w-1/3 p-4 border-2 border-gray-200 rounded overflow-hidden">
+    <hr>
+    <!-- Review Form -->
+    <div class="mt-4">
+        <h3 class="pb-3">Submit your review:</h3>
+        <form method="post" id="review_form" action="/book/{{ book.pk }}/">
+            {% csrf_token %}
+            <div class="flex">
+                <button  id="dropdownDefaultButton2" data-dropdown-toggle="dropdown2"
+                    class="right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 bg-[#00ADB5] hover:bg-blue-700 focus:ring-blue-800">
+                    <div class="flex">
+                        Rating
+                        <div class="pt-2">
+                            <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 4 4 4-4" />
+                            </svg>
+                        </div>
+                    </div>
+                </button>
+                <div id="dropdown2" class="rating z-10 hidden divide-y rounded-lg bg-[#00ADB5] w-24">
+                    <ul aria-labelledby="dropdownDefaultButton2">
+                        <li class="pl-3">
+                            <input type="radio" id="star5" name="rating" value="1" />
+                            <label for="star5">1</label>
+                        </li>
+                        <li class="pl-3">
+                            <input type="radio" id="star4" name="rating" value="2" />
+                            <label for="star4">2</label>
+                        </li>
+                        <li class="pl-3">
+                            <input type="radio" id="star3" name="rating" value="3" />
+                            <label for="star3">3</label>
+                        </li>
+                        <li class="pl-3">
+                            <input type="radio" id="star2" name="rating" value="4" />
+                            <label for="star2">4</label>
+                        </li>
+                        <li class="pl-3">
+                            <input type="radio" id="star1" name="rating" value="5" />
+                            <label for="star1">5</label>
+                        </li>
+                    </ul>
+                </div>
+                <input name="comment" id="floating_review" class="block py-2.5 mx-2 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:ring-0 focus:border-[#09adf6] peer">
+                <input class="relative-right" type="submit" value="Submit">
+            </div>
+        </form>
+        <div class="mt-20">
+            <br>
+
+            <!-- Displaying existing reviews -->
+            <br>
+            <h3>Reviews:</h3>
+            {% for review in reviews %}
+            <div>
+                <div  id="reviewsection">
+                    <div class="py-4">
+                        <div class="w-full p-4 border-2 border-gray-200 rounded overflow-hidden">
                             <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
                             <br>
                             Rating: {{ review.rating }}
                             <!-- Adjusted classes below for text wrapping and overflow handling -->
                             <p class="text-sm break-words overflow-auto">{{ review.comment }}</p>
                         </div>
+                    </div>
                         {% empty %}
                         <p>No reviews yet. Be the first to review this book!</p>
                         {% endfor %}
                     </div>
-                </div>
+                
             </div>
         </div>
     </div>
+</div>
 
 {% include 'footer.html' %}
 </div>
@@ -147,7 +190,6 @@
                 method: 'POST',
                 data: formData,
                 success: function (data) {
-                    $('#reviewsection').empty(); // Clear the previous reviews
                     var reviewHtml = "";
 
                     // Iterate over the new reviews data
@@ -161,7 +203,7 @@
                         // Create the new review HTML
                         reviewHtml += `
                         <div class="py-2">
-                            <div class="review w-full md:w-1/2 lg:w-1/3 p-4 border-2 border-gray-200 rounded overflow-hidden">
+                            <div class="review w-full p-4 border-2 border-gray-200 rounded overflow-hidden">
                                 <strong>${review.user_name}</strong> (${formattedDate})
                                 <p>Rating: ${review.rating}</p>
                                 <p class="text-sm break-words overflow-auto">${review.comment}</p>

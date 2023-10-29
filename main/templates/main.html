@@ -6,7 +6,7 @@
 <div class="flex-col">
     <div class="flex justify-center items-center mt-40">
         <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-white-900 md:text-2xl lg:text-4xl">Discover new worlds, <span class="underline underline-offset-3 decoration-8 decoration-blue-400 ">one book at a time.</span></h1>
-        <a href="/category/">
+        <a href="/category/all/">
         <button type="button" class="ml-2 text-white bg-gradient-to-r from-[#00ADB5] via-[#00ADB5] to-[#00ADB5] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Or set your starting point here!</button>
         </a>
     </div>
@@ -14,8 +14,6 @@
     <div id="show_random_books" class="grid grid-cols-5 md:grid-cols-5 lg:grid-cols-10 gap-4 absolute inset-x-0 bottom-0">
     </div>
 </div>
-
-{% include 'footer.html' %}
     
 <script>
     const bookBaseURL = "/book/";
@@ -43,7 +41,8 @@
 
                         </div>
                     </a>
-                </div>`;
+                </div>
+                `;
         });
 
         document.getElementById("show_random_books").innerHTML = htmlString;
@@ -51,5 +50,6 @@
 
     refreshBook()
 </script>
+
 
 {% endblock content %}
