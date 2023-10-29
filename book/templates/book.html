@@ -214,8 +214,8 @@
                     $('#reviewsection').html(reviewHtml);
 
                     // Clear the input fields for the rating and comment
-                    $('#id_rating').val('');
-                    $('#id_comment').val('');
+                    $('input[name="rating"]').prop('checked', false); // This will uncheck the selected rating radio button.
+                    $('input[name="comment"]').val(''); // This will clear the comment field.
                 },
                 error: function (response) {
                     console.log(response);

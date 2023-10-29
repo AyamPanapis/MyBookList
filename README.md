@@ -37,13 +37,23 @@ Inspired by "MyAnimeList.com" our website will use similiar listing system, but 
 git clone git@github.com:AyamPanapis/MyBookList.git
 cd MyBookList
 python -m venv env
-env/bin/activate
+env/Scripts/activate
 pip install -r requirements.txt
+```
+
+```
+# To install tailwind
+python manage.py tailwind install
 ```
 
 ```
 # To load tailwind
 python manage.py tailwind start
+```
+
+```
+# To install flowbite
+npm install flowbite
 ```
 
 ```
