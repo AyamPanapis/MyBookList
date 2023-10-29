@@ -1,93 +1,95 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="flex flex-col min-h-screen"></div>
+    {% include "navbar.html" %}
 
-{% include "navbar.html" %}
+    <!-- Displaying the book details -->
+    <div class="relative flex-col px-4">
+        <div class="flex">
 
-<!-- Displaying the book details -->
-<div class="relative flex-col px-4 pt-6">
-    <div class="flex">
+            <!-- Combined section for book cover and details -->
+            <div class="flex-1 flex-col p-10" style="display: flex; flex-direction: row;">
 
-        <!-- Combined section for book cover and details -->
-        <div class="flex-1 flex-col p-10" style="display: flex; flex-direction: row;">
+                <!-- Book cover subsection -->
+                <div style="flex: 1;">
+                    <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
+                    <p>Author:</p>
+                    <p><strong>{{ book.author }}</strong></p>
+                    <p>Publisher:</p>
+                    <p><strong>{{ book.publisher }}</strong></p>
+                    <p>Categories:</p>
+                    <p><strong>{{ book.categories }}</strong></p>
+                </div>
 
-            <!-- Book cover subsection -->
-            <div style="flex: 1;">
-                <img src="{{ book.image_link }}" alt="book image" style="max-width: 100%; height: auto;">
-                <p>Author:</p>
-                <p><strong>{{ book.author }}</strong></p>
-                <p>Publisher:</p>
-                <p><strong>{{ book.publisher }}</strong></p>
-                <p>Categories:</p>
-                <p><strong>{{ book.categories }}</strong></p>
-            </div>
+                <!-- Vertical Divider (the white vertical line) -->
+                <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
 
-            <!-- Vertical Divider (the white vertical line) -->
-            <div class="w-px bg-gray-300 mx-4 self-stretch" style="height:100%;"></div>
+                <!-- Book details subsection -->
+                <div class="max-w-full h-max flex-1 p-10" style="flex: 1; padding: 10px;">
+                    <p><strong>{{ book.title }} </strong></p>
+                    <hr>
+                    <p>{{ book.description }}</p>
+                </div>
 
-            <!-- Book details subsection -->
-            <div class="max-w-full h-max flex-1 p-10" style="flex: 1; padding: 10px;">
-                <p><strong>{{ book.title }} </strong></p>
-                <hr>
-                <p>{{ book.description }}</p>
             </div>
 
         </div>
 
-    </div>
-
-    <hr>
-    <!-- Review Form -->
-    <div>
-        <h3>Submit your review:</h3>
-        <form method="post" id="review_form" action="/book/{{ book.pk }}/">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-        </form>
-        <form method="POST"></form>
-        <div class="">
-            <input id="default-radio-1" type="radio" name="default-radio"
-                onclick="toRead('{{ book.id }}','{{user.id}}')" value="0" class="">
-            <label for="default-radio-1">To Read</label>
-            <div class="">
-                <input id="default-radio-2" type="radio" name="default-radio"
-                    onclick="reading('{{ book.id }}','{{user.id}}')" value="1" class="">
-                <label for="default-radio-2">Reading</label>
-            </div>
-            <div>
-                <input id="default-radio-3" type="radio" name="default-radio"
-                    onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
-                <label for="default-radio-3">Finish reading</label>
-            </div>
-        </div>
-        </form>
+        <hr>
+        <!-- Review Form -->
         <div>
-            <br>
-            <p>Average Rating: {{ average_rating }}</p>
-
-            <!-- Displaying existing reviews -->
-            <br>
-            <h3>Reviews:</h3>
-            {% for review in reviews %}
+            <h3>Submit your review:</h3>
+            <form method="post" id="review_form" action="/book/{{ book.pk }}/">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit">
+            </form>
+            <form method="POST"></form>
+            <div class="">
+                <input id="default-radio-1" type="radio" name="default-radio"
+                    onclick="toRead('{{ book.id }}','{{user.id}}')" value="0" class="">
+                <label for="default-radio-1">To Read</label>
+                <div class="">
+                    <input id="default-radio-2" type="radio" name="default-radio"
+                        onclick="reading('{{ book.id }}','{{user.id}}')" value="1" class="">
+                    <label for="default-radio-2">Reading</label>
+                </div>
+                <div>
+                    <input id="default-radio-3" type="radio" name="default-radio"
+                        onclick="finishedReading('{{ book.id }}','{{user.id}}')" value="2" class="">
+                    <label for="default-radio-3">Finish reading</label>
+                </div>
+            </div>
+            </form>
             <div>
-                <div class="py-4" id="reviewsection">
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 border-2 border-gray-200 rounded overflow-hidden">
-                        <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
-                        <br>
-                        Rating: {{ review.rating }}
-                        <!-- Adjusted classes below for text wrapping and overflow handling -->
-                        <p class="text-sm break-words overflow-auto">{{ review.comment }}</p>
+                <br>
+                <p>Average Rating: {{ average_rating }}</p>
+
+                <!-- Displaying existing reviews -->
+                <br>
+                <h3>Reviews:</h3>
+                {% for review in reviews %}
+                <div>
+                    <div class="py-4" id="reviewsection">
+                        <div class="w-full md:w-1/2 lg:w-1/3 p-4 border-2 border-gray-200 rounded overflow-hidden">
+                            <strong>{{ review.user_name }}</strong> ({{ review.pub_date }})
+                            <br>
+                            Rating: {{ review.rating }}
+                            <!-- Adjusted classes below for text wrapping and overflow handling -->
+                            <p class="text-sm break-words overflow-auto">{{ review.comment }}</p>
+                        </div>
+                        {% empty %}
+                        <p>No reviews yet. Be the first to review this book!</p>
+                        {% endfor %}
                     </div>
-                    {% empty %}
-                    <p>No reviews yet. Be the first to review this book!</p>
-                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+{% include 'footer.html' %}
+</div>
 <script>
 
     function toRead(book_id, user_id) {
@@ -180,5 +182,7 @@
         });
     });
 </script>
+
+
 
 {% endblock %}
