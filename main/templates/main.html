@@ -1,40 +1,55 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 {% include 'navbar.html' %}
 
-<h3> Hi! {{ username }}, welcome to MyBookList! Here are some lists of books that we think you may like.</h3>
-<ul id="show_random_books"></ul>
+<div class="flex-col">
+    <div class="flex justify-center items-center mt-40">
+        <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-white-900 md:text-2xl lg:text-4xl">Discover new worlds, <span class="underline underline-offset-3 decoration-8 decoration-blue-400 ">one book at a time.</span></h1>
+        <a href="/category/">
+        <button type="button" class="ml-2 text-white bg-gradient-to-r from-[#00ADB5] via-[#00ADB5] to-[#00ADB5] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Or set your starting point here!</button>
+        </a>
+    </div>
+
+    <div id="show_random_books" class="grid grid-cols-5 md:grid-cols-5 lg:grid-cols-10 gap-4 absolute inset-x-0 bottom-0">
+    </div>
+</div>
 
 {% include 'footer.html' %}
-
+    
 <script>
     const bookBaseURL = "/book/";
 </script>
 
 <script>
     async function getProducts() {
-        return fetch(`./get-product/`).then((res) => res.json())
+        return fetch(`./get-product/`).then((res) => res.json());
     }
+
     async function refreshBook() {
         document.getElementById("show_random_books").innerHTML = "";
         const books = await getProducts();
         let htmlString = "";
+
         books.forEach((item) => {
-            const bookUrl = `${bookBaseURL}${item.pk}/`;
+            const truncatedDescription = item.fields.description.split(" ").slice(0, 30).join(" ") + (item.fields.description.split(" ").length > 30 ? "..." : "");
+            const bookUrl = `${bookBaseURL}${item.pk}`;
             htmlString += `
-                    <a href="${bookUrl}" class="block mt-2 text-lg text-center">${item.fields.title}</a>
-                    <p class="block mt-2 text-lg text-center">${item.fields.author}</p>
-                    <a href="/book/${item.pk}"><img src="${item.fields.image_link}" alt="book image" class="center"></a>
-                `;
+                <div class="group relative">
+                    <a href="${bookUrl}" class="block">
+                        <img class="w-full rounded-lg" src="${item.fields.image_link}" alt="${item.fields.title}">
+                        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-2 text-white text-xs rounded-b-lg transition-opacity opacity-0 group-hover:opacity-100">
+                            <strong>${item.fields.title} by ${item.fields.author}</strong><br>
+
+                        </div>
+                    </a>
+                </div>`;
         });
-        
+
         document.getElementById("show_random_books").innerHTML = htmlString;
     }
 
     refreshBook()
 </script>
-
 
 {% endblock content %}
