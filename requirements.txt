@@ -6,3 +6,5 @@ requests
 urllib3
 django-tailwind
 django-compressor
+django-cors-headers
+django-environ
