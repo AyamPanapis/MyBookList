@@ -19,13 +19,14 @@ RUN addgroup --system django \
 
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
-RUN python manage.py insertdata
 
 COPY . .
 
 RUN python manage.py tailwind install
 RUN python manage.py tailwind build
 RUN python manage.py collectstatic --noinput --clear
+
+RUN python manage.py insertdata
 
 RUN chown -R django:django /app
 USER django
