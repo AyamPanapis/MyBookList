@@ -24,6 +24,7 @@ COPY . .
 
 RUN python manage.py tailwind install
 RUN python manage.py tailwind build
+RUN python manage.py insertdata
 RUN python manage.py collectstatic --noinput --clear
 
 RUN chown -R django:django /app
