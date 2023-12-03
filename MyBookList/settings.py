@@ -160,7 +160,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-NPM_BIN_PATH=r"C:\Program Files\nodejs\npm.cmd"
+# NPM_BIN_PATH=r"C:\Program Files\nodejs\npm.cmd"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
