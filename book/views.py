@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import datetime
 from django.db.models import Avg
+import json
+from django.views.decorators.csrf import csrf_exempt
+
 
 @login_required(login_url='/auth/login/')
 def show_books(request, book_id):
@@ -72,3 +75,22 @@ def finished_reading(request, book_id, user_id):
     except WishList.DoesNotExist:
         WishList.objects.create(book=book.pk, user=user, book_list=2)
     return HttpResponse(b"FINISH", status=201)
+
+@csrf_exempt
+def create_review_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_review = Review.objects.create(
+            user = request.user,
+            user_name = data["name"],
+            comment = data["comment"],
+            rating = int(data["rating"]),
+        )
+
+        new_review.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
