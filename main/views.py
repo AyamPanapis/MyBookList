@@ -15,10 +15,10 @@ def show_main(request):
     total_books = Book.objects.count()
 
     # Generate a list of 10 unique random indices to select 10 random books
-    random_indices = random.sample(range(1, total_books + 1), 10)
+    # random_indices = random.sample(range(1, total_books + 1), 10)
 
     # Retrieve the 10 random books
-    books = Book.objects.filter(pk__in=random_indices)
+    books = Book.objects.all()
 
     context = {
         'username': request.user.username,
