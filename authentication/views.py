@@ -7,6 +7,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
+from .models import UserAuth
+from django.http import HttpResponse
+from django.core import serializers
 
 # Create your views here.
 def register(request):
@@ -109,3 +112,22 @@ def logout_flutter(request):
         "status": False,
         "message": "Logout failed."
         }, status=401)
+    
+def show_json_by_id(request):
+    data = User.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def user_data(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+        status_message = "User data found!"
+    else:
+        username = "Guest"
+        status_message = "User data not found!"
+
+    return JsonResponse({
+        "username": username,
+        "status": request.user.is_authenticated,
+        "message": status_message
+    }, status=200)
