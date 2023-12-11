@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 import datetime
 from django.db.models import Avg
 import json
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
-
+@csrf_protect
 @login_required(login_url='/auth/login/')
 def show_books(request, book_id):
     book = get_object_or_404(Book, pk=book_id)

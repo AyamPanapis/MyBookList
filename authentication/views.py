@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from .models import UserAuth
@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.core import serializers
 
 # Create your views here.
+@csrf_protect
 def register(request):
 
     form = UserCreationForm()
@@ -27,6 +28,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
+@csrf_protect
 def login_user(request):
 
     if request.user.is_authenticated:
@@ -45,6 +47,7 @@ def login_user(request):
 
     return render(request, 'login.html')
 
+@csrf_protect
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/')
@@ -113,21 +116,12 @@ def logout_flutter(request):
         "message": "Logout failed."
         }, status=401)
     
+@csrf_exempt
 def show_json_by_id(request):
     data = User.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @csrf_exempt
 def user_data(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        status_message = "User data found!"
-    else:
-        username = "Guest"
-        status_message = "User data not found!"
-
-    return JsonResponse({
-        "username": username,
-        "status": request.user.is_authenticated,
-        "message": status_message
-    }, status=200)
+    username = request.user.username
+    return JsonResponse({"username": username})
