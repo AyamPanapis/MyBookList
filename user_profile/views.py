@@ -58,7 +58,7 @@ def get_reading_json(request):
 def get_completed_json(request):
     user = request.user
 
-    completed_book_ids = WishList.objects.filter(user=user, book_list=2).values_list('book', flat=True)
+    completed_book_ids = WishList.objects.filter(user=user.username, book_list=2).values_list('book', flat=True)
 
     completed_books = Book.objects.filter(id__in=completed_book_ids)
     return HttpResponse(serializers.serialize('json', completed_books))
