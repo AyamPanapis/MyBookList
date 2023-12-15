@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'dataset',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,7 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
+
 ROOT_URLCONF = 'MyBookList.urls'
 
 CORS_ALLOW_HEADERS = [
@@ -169,4 +171,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Taiwlind Initialaization
 
+
+
 TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+NPM_BIN_PATH=r"C:\Program Files\nodejs\npm.cmd"
