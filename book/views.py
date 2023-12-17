@@ -80,19 +80,23 @@ def finished_reading(request, book_id, user_id):
 @csrf_exempt
 def create_review_flutter(request):
     if request.method == 'POST':
-        
         data = json.loads(request.body)
 
+        book = get_object_or_404(Book, pk=data["book_id"])
+
         new_review = Review.objects.create(
-            user = request.user,
-            user_name = data["name"],
+            book = book,
+            user_name = data["username"],
             comment = data["comment"],
             rating = int(data["rating"]),
+            pub_date = datetime.datetime.now(),
         )
 
         new_review.save()
 
-        return JsonResponse({"status": "success"}, status=200)
+        dataNew = list(Review.objects.filter(book_id=data["book_id"]).values())
+
+        return JsonResponse({'reviews': dataNew}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
     
