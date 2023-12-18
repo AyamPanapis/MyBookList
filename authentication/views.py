@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 from .models import UserAuth
 from django.http import HttpResponse
 from django.core import serializers
-import json
 
 # Create your views here.
 @csrf_protect
@@ -125,6 +124,4 @@ def show_json_by_id(request):
 @csrf_exempt
 def user_data(request):
     username = request.user.username
-    data = {"username": username}
-    json_data = json.dumps(data)
-    return HttpResponse(json_data, content_type="application/json")
+    return JsonResponse({"username": username}, status=200)
