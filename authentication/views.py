@@ -124,5 +124,8 @@ def show_json_by_id(request):
 
 @csrf_exempt
 def user_data(request):
-    username = request.user.username
-    return JsonResponse({"username": username}, status=200)
+    if request == "GET":
+        username = request.user.username
+        return JsonResponse({"username": username}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
