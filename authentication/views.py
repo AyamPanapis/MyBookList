@@ -122,7 +122,6 @@ def show_json_by_id(request):
     data = User.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-@login_required
 @csrf_exempt
 def user_data(request):
     username = request.user.username

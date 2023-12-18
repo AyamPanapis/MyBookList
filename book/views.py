@@ -116,8 +116,7 @@ def wishlist_flutter(request, book_id):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
-
-@login_required    
+ 
 @csrf_exempt
 def add_book_review(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
