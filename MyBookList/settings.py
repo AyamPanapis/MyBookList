@@ -57,12 +57,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -179,3 +179,8 @@ INTERNAL_IPS = [
 
 CSRF_TRUSTED_ORIGINS = ["https://mybooklist-k1-tk.pbp.cs.ui.ac.id"]
 # NPM_BIN_PATH=r"C:\Program Files\nodejs\npm.cmd"
+
+CORS_ALLOWED_ORIGINS = [
+    'https://mybooklist-k1-tk.pbp.cs.ui.ac.id',
+
+]
