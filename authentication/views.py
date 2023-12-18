@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from .models import UserAuth
 from django.http import HttpResponse
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 @csrf_protect
@@ -121,6 +122,7 @@ def show_json_by_id(request):
     data = User.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required
 @csrf_exempt
 def user_data(request):
     username = request.user.username
