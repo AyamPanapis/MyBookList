@@ -177,5 +177,5 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://mybooklist-k1-tk.pbp.cs.ui.ac.id/"]
+CSRF_TRUSTED_ORIGINS = ["https://mybooklist-k1-tk.pbp.cs.ui.ac.id"]
 # NPM_BIN_PATH=r"C:\Program Files\nodejs\npm.cmd"
